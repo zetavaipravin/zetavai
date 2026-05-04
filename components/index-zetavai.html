@@ -52,10 +52,28 @@
   --shadow-hover: 0 20px 40px rgba(12,20,34,0.12), 0 8px 16px rgba(12,20,34,0.06);
 
   --pad: 80px;
-  --section-pad: 72px;
+  --section-pad: 112px;
 }
 
-html { scroll-behavior: smooth; }
+html, body { height: 100%; }
+body { overflow: hidden; }
+
+/* Multi-page layout */
+.page {
+  display: none;
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+  position: absolute;
+  top: 72px;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.page.active {
+  display: block;
+}
+.page > section { min-height: 100%; display: flex; flex-direction: column; }
+.page > footer { margin-top: auto; }
 body {
   background: var(--bg); color: var(--ink);
   font-family: var(--font-b); font-size: 16px; line-height: 1.65;
@@ -99,11 +117,11 @@ nav.scrolled {
   border-bottom-color: var(--line);
   box-shadow: 0 1px 12px rgba(12,20,34,0.06);
 }
-.nav-logo { display: inline-flex; align-items: center; gap: 1rem; font-family: var(--font-h); color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
-.nav-logo-left { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
-.nav-logo-left span { font-size: 0.75rem; font-weight: 800; color: var(--accent); letter-spacing: 0.01em; }
-.nav-logo-img { height: 48px; width: auto; display: block; }
-.nav-logo-tagline { font-size: 0.72rem; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; align-self: center; }
+.nav-logo { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; font-family: var(--font-h); color: var(--ink); text-decoration: none; cursor: pointer; }
+.nav-logo-text { display: flex; flex-direction: column; gap: 0; }
+.nav-logo-brand { font-size: 1.15rem; font-weight: 800; color: var(--accent); letter-spacing: -0.01em; }
+.nav-logo-tagline { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+.nav-logo-img { height: 48px; width: auto; display: block; margin-bottom: 0.2rem; }
 .hero-tagline { display: inline-block; margin-top: 0.9rem; font-family: var(--font-h); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--accent); }
 .hero-tagline em { font-style: normal; color: var(--accent-vivid); }
 .footer-logo-img { height: 44px; width: auto; vertical-align: middle; margin-right: 0.55rem; filter: invert(1) brightness(1.1); }
@@ -333,7 +351,7 @@ nav.scrolled {
 #services { padding: var(--section-pad) var(--pad); background: var(--bg-alt); }
 .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 .service-card {
-  background: var(--bg); padding: 22px 20px; display: flex; flex-direction: row; align-items: flex-start;
+  background: var(--bg); padding: 34px 28px;
   transition: background 0.3s, transform 0.2s; position: relative;
 }
 .service-card::before {
@@ -345,13 +363,12 @@ nav.scrolled {
 .service-card:hover::before { opacity: 1; }
 .service-card-open { background: var(--accent-bg); }
 .service-card-open:hover { background: #E5EDF9; }
-.service-body { flex: 1; min-width: 0; }
-.service-icon { font-size: 1.4rem; margin-bottom: 0; margin-right: 14px; flex-shrink: 0; margin-top: 2px; display: block; }
-.service-name { font-family: var(--font-h); font-size: 0.97rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.01em; }
-.service-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
-.service-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
-.service-list li { font-size: 0.75rem; font-weight: 500; color: var(--ink2); display: flex; align-items: flex-start; gap: 6px; line-height: 1.45; }
-.service-list li::before { content: ''; display: block; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.service-icon { font-size: 1.5rem; margin-bottom: 16px; display: block; }
+.service-name { font-family: var(--font-h); font-size: 0.97rem; font-weight: 700; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.01em; }
+.service-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
+.service-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.service-list li { font-size: 0.75rem; font-weight: 500; color: var(--ink2); display: flex; align-items: flex-start; gap: 8px; line-height: 1.45; }
+.service-list li::before { content: ''; display: block; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
 .open-cta-wrap { margin-top: 24px; }
 .open-cta-btn {
   display: inline-block; font-family: var(--font-b); font-size: 0.8rem; font-weight: 600;
@@ -524,7 +541,7 @@ nav.scrolled {
 /* ── Inputs ── */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .form-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
-.form-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.85); }
+.form-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(200,215,240,0.4); }
 .form-input, .form-textarea {
   background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px; padding: 11px 14px; font-family: var(--font-b); font-size: 0.875rem;
@@ -663,14 +680,14 @@ footer::before {
 <body>
 
 <nav>
-  <a href="#" class="nav-logo"><div class="nav-logo-left"><img src="images/Black Logo_without background.png" alt="Zetavai logo" class="nav-logo-img"><span>Zetavai</span></div><span class="nav-logo-tagline">The Virtual Company</span></a>
+  <a href="#" class="nav-logo" data-page="home"><img src="images/Black Logo_without background.png" alt="Zetavai logo" class="nav-logo-img"><div class="nav-logo-text"><span class="nav-logo-brand">Zetavai</span><span class="nav-logo-tagline">The Virtual Company</span></div></a>
   <ul class="nav-links">
-    <li><a href="#who">Who We Help</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#impact">Impact</a></li>
-    <li><a href="#team">Team</a></li>
+    <li><a href="#" data-page="who">Who We Help</a></li>
+    <li><a href="#" data-page="services">Services</a></li>
+    <li><a href="#" data-page="impact">Impact</a></li>
+    <li><a href="#" data-page="team">Team</a></li>
   </ul>
-  <a href="#cta" class="nav-cta">Talk to Us</a>
+  <a href="#" class="nav-cta" data-page="home">Talk to Us</a>
   <button class="hamburger" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
@@ -678,13 +695,15 @@ footer::before {
 
 <!-- Mobile Nav Overlay -->
 <div class="mobile-nav">
-  <a href="#who">Who We Help</a>
-  <a href="#services">Services</a>
-  <a href="#impact">Impact</a>
-  <a href="#team">Team</a>
-  <a href="#cta" style="color: var(--accent); font-weight: 700;">Talk to Us</a>
+  <a href="#" data-page="who">Who We Help</a>
+  <a href="#" data-page="services">Services</a>
+  <a href="#" data-page="impact">Impact</a>
+  <a href="#" data-page="team">Team</a>
+  <a href="#" data-page="home" style="color: var(--accent); font-weight: 700;">Talk to Us</a>
 </div>
 
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
 <!-- HERO -->
 <section id="hero">
   <div class="hero-orb hero-orb-1"></div>
@@ -702,8 +721,8 @@ footer::before {
     </h1>
     <p class="hero-sub reveal" style="transition-delay:0.16s">We automate the documentation, content, proposals, and back-office tasks that consume 15+ hours of your week, so you can put that time back into clients, products, and real growth.</p>
     <div class="hero-actions reveal" style="transition-delay:0.24s">
-      <a href="#services" class="btn-primary">See What We Automate</a>
-      <a href="#impact" class="btn-secondary">See Time Savings</a>
+      <a href="#" class="btn-primary" data-page="services">See What We Automate</a>
+      <a href="#" class="btn-secondary" data-page="impact">See Time Savings</a>
     </div>
     <div class="hero-stats reveal" style="transition-delay:0.32s">
       <div class="stat-item"><div class="stat-num" data-count="15" data-suffix="+">0</div><div class="stat-label">Hours saved<br>per week</div></div>
@@ -742,6 +761,8 @@ footer::before {
   </div>
 </section>
 
+<!-- WHO PAGE -->
+<div class="page" id="page-who">
 <!-- WHO WE SERVE -->
 <section id="who">
   <div class="sec-label sec-label-lt reveal">Who We Serve</div>
@@ -757,9 +778,13 @@ footer::before {
     <div class="who-card reveal" style="transition-delay:0.18s"><div class="who-icon">&#x1F3E2;</div><div class="who-name">Real Estate &amp; Finance</div><div class="who-desc">Property briefs, investment summaries, client onboarding docs, and regulatory communication.</div></div>
     <div class="who-card reveal" style="transition-delay:0.24s"><div class="who-icon">&#x1F393;</div><div class="who-name">Education &amp; Coaching</div><div class="who-desc">Course materials, student communication, marketing content, and enrolment packs on autopilot.</div></div>
   </div>
+  <div class="who-bottom reveal">
+    <div class="who-bottom-icon">&#x1F4A1;</div>
+    <div class="who-bottom-text"><strong>Not in this list?</strong> If your business produces documents, reports, content, or communication, we can automate it. The industry doesn't matter. The inefficiency does.</div>
+  </div>
 </section>
+</div>
 
-<hr class="section-divider">
 
 <!-- PILLARS -->
 <section id="pillars">
@@ -773,25 +798,28 @@ footer::before {
   </div>
 </section>
 
-<hr class="section-divider">
 
+<!-- SERVICES PAGE -->
+<div class="page" id="page-services">
 <!-- SERVICES -->
 <section id="services">
   <div class="sec-label reveal">What We Do</div>
   <h2 class="sec-h reveal">Your back office,<br><em>fully automated.</em></h2>
   <p class="sec-sub reveal">Seven service areas, each designed to remove a specific category of time-drain from your week and replace it with instant, branded, accurate output.</p>
   <div class="services-grid">
-    <div class="service-card reveal"><span class="service-icon">&#x1F4DD;</span><div class="service-body"><h3 class="service-name">Documentation &amp; SOPs</h3><p class="service-desc">Never write a process document from scratch again. AI systems that generate, update, and maintain your operational documentation automatically.</p><ul class="service-list"><li>Standard Operating Procedures</li><li>Process &amp; workflow documentation</li><li>Compliance &amp; audit-ready documents</li><li>Employee handbooks &amp; onboarding packs</li></ul></div></div>
-    <div class="service-card reveal" style="transition-delay:0.08s"><span class="service-icon">&#x1F4BC;</span><div class="service-body"><h3 class="service-name">Proposals &amp; Collateral</h3><p class="service-desc">Win more deals by responding faster. Custom AI drafts proposals, quotes, and pitch decks in your voice, in minutes, not days.</p><ul class="service-list"><li>Proposal &amp; quote generation</li><li>Pitch decks &amp; capability statements</li><li>Product &amp; service brochures</li><li>Case studies &amp; client reports</li></ul></div></div>
-    <div class="service-card reveal"><span class="service-icon">&#x1F4CA;</span><div class="service-body"><h3 class="service-name">Reports &amp; Dashboards</h3><p class="service-desc">Turn raw data into clear decisions. Automated reporting pipelines that give you the right information at the right time, without manual effort.</p><ul class="service-list"><li>Weekly &amp; monthly business reports</li><li>Sales &amp; performance dashboards</li><li>Financial summaries for stakeholders</li><li>Management decks &amp; board packs</li></ul></div></div>
-    <div class="service-card reveal" style="transition-delay:0.08s"><span class="service-icon">&#x1F4E7;</span><div class="service-body"><h3 class="service-name">Communication Automation</h3><p class="service-desc">From client onboarding to vendor follow-ups, routine communication automated so nothing falls through the cracks.</p><ul class="service-list"><li>Client onboarding communication</li><li>Vendor &amp; supplier correspondence</li><li>Follow-up sequences &amp; reminders</li><li>Customer response templates</li></ul></div></div>
-    <div class="service-card reveal" style="transition-delay:0.16s"><span class="service-icon">&#x1F527;</span><div class="service-body"><h3 class="service-name">Backend Workflow Agents</h3><p class="service-desc">Connect your tools and eliminate manual steps. Custom agentic workflows that handle data, triggers, and outputs, end to end.</p><ul class="service-list"><li>Data extraction and summarisation</li><li>Parsing and structuring data from PDFs</li><li>Multi-tool workflow integration</li><li>Custom AI agents for your operations</li></ul></div></div>
-    <div class="service-card reveal"><span class="service-icon">&#x1F310;</span><div class="service-body"><h3 class="service-name">Website &amp; Digital Footprint</h3><p class="service-desc">Your online presence, built and maintained without the agency overhead. From landing pages to full websites, we create your digital footprint.</p><ul class="service-list"><li>Business website design and development</li><li>Landing pages and lead capture</li><li>Google Business and directory listings</li><li>SEO setup and content structure</li></ul></div></div>
+    <div class="service-card reveal"><span class="service-icon">&#x1F4DD;</span><h3 class="service-name">Documentation &amp; SOPs</h3><p class="service-desc">Never write a process document from scratch again. AI systems that generate, update, and maintain your operational documentation automatically.</p><ul class="service-list"><li>Standard Operating Procedures</li><li>Process &amp; workflow documentation</li><li>Compliance &amp; audit-ready documents</li><li>Employee handbooks &amp; onboarding packs</li></ul></div>
+    <div class="service-card reveal" style="transition-delay:0.08s"><span class="service-icon">&#x1F4BC;</span><h3 class="service-name">Proposals &amp; Collateral</h3><p class="service-desc">Win more deals by responding faster. Custom AI drafts proposals, quotes, and pitch decks in your voice, in minutes, not days.</p><ul class="service-list"><li>Proposal &amp; quote generation</li><li>Pitch decks &amp; capability statements</li><li>Product &amp; service brochures</li><li>Case studies &amp; client reports</li></ul></div>
+    <div class="service-card reveal"><span class="service-icon">&#x1F4CA;</span><h3 class="service-name">Reports &amp; Dashboards</h3><p class="service-desc">Turn raw data into clear decisions. Automated reporting pipelines that give you the right information at the right time, without manual effort.</p><ul class="service-list"><li>Weekly &amp; monthly business reports</li><li>Sales &amp; performance dashboards</li><li>Financial summaries for stakeholders</li><li>Management decks &amp; board packs</li></ul></div>
+    <div class="service-card reveal" style="transition-delay:0.08s"><span class="service-icon">&#x1F4E7;</span><h3 class="service-name">Communication Automation</h3><p class="service-desc">From client onboarding to vendor follow-ups, routine communication automated so nothing falls through the cracks.</p><ul class="service-list"><li>Client onboarding communication</li><li>Vendor &amp; supplier correspondence</li><li>Follow-up sequences &amp; reminders</li><li>Customer response templates</li></ul></div>
+    <div class="service-card reveal" style="transition-delay:0.16s"><span class="service-icon">&#x1F527;</span><h3 class="service-name">Backend Workflow Agents</h3><p class="service-desc">Connect your tools and eliminate manual steps. Custom agentic workflows that handle data, triggers, and outputs, end to end.</p><ul class="service-list"><li>Data extraction and summarisation</li><li>Parsing and structuring data from PDFs</li><li>Multi-tool workflow integration</li><li>Custom AI agents for your operations</li></ul></div>
+    <div class="service-card reveal"><span class="service-icon">&#x1F310;</span><h3 class="service-name">Website &amp; Digital Footprint</h3><p class="service-desc">Your online presence, built and maintained without the agency overhead. From landing pages to full websites, we create your digital footprint.</p><ul class="service-list"><li>Business website design and development</li><li>Landing pages and lead capture</li><li>Google Business and directory listings</li><li>SEO setup and content structure</li></ul></div>
   </div>
 </section>
+</div>
 
-<hr class="section-divider">
 
+<!-- IMPACT PAGE -->
+<div class="page" id="page-impact">
 <!-- IMPACT -->
 <section id="impact">
   <div class="sec-label reveal">The Real Cost of Manual Work</div>
@@ -807,6 +835,7 @@ footer::before {
         <div class="impact-table-head"><span>Task</span><span>Manual Time</span><span>With Zetavai</span></div>
         <div class="impact-row"><div class="impact-task">Client proposal</div><div class="impact-before">3&ndash;5 hrs</div><div class="impact-after">~15 mins</div></div>
         <div class="impact-row"><div class="impact-task">Weekly business report</div><div class="impact-before">2&ndash;4 hrs</div><div class="impact-after">~10 mins</div></div>
+        <div class="impact-row"><div class="impact-task">Monthly social content</div><div class="impact-before">8&ndash;12 hrs</div><div class="impact-after">~45 mins</div></div>
         <div class="impact-row"><div class="impact-task">Client onboarding pack</div><div class="impact-before">4&ndash;6 hrs</div><div class="impact-after">~20 mins</div></div>
         <div class="impact-row"><div class="impact-task">Vendor correspondence</div><div class="impact-before">1&ndash;2 hrs/wk</div><div class="impact-after">~5 mins</div></div>
         <div class="impact-row"><div class="impact-task">SOP documentation</div><div class="impact-before">Full day</div><div class="impact-after">~1 hr</div></div>
@@ -814,7 +843,10 @@ footer::before {
     </div>
   </div>
 </section>
+</div>
 
+<!-- TEAM PAGE -->
+<div class="page" id="page-team">
 <!-- TEAM -->
 <section id="team">
   <div class="sec-label reveal">The Team</div>
@@ -825,7 +857,7 @@ footer::before {
   <div class="team-founders">
     <div class="team-card reveal">
       <div class="team-card-top">
-        <div class="team-photo-wrap"><img class="team-photo" src="images/Pranav Jaju Final.png" alt="Pranav Jaju, Co-Founder & CEO"></div>
+        <div class="team-photo-wrap"><div class="team-photo team-initials">PJ</div></div>
         <div class="team-card-header">
           <div class="team-role">Co-Founder &amp; CEO</div>
           <div class="team-name">Pranav Jaju</div>
@@ -838,7 +870,7 @@ footer::before {
     </div>
     <div class="team-card reveal" style="transition-delay:0.1s">
       <div class="team-card-top">
-        <div class="team-photo-wrap"><img class="team-photo" src="images/Pravin Jaju Final.png" alt="Pravin Jaju, Co-Founder & CTO"></div>
+        <div class="team-photo-wrap"><div class="team-photo team-initials">PJ</div></div>
         <div class="team-card-header">
           <div class="team-role">Co-Founder &amp; CTO</div>
           <div class="team-name">Pravin Jaju</div>
@@ -851,6 +883,7 @@ footer::before {
     </div>
   </div>
 </section>
+</div>
 
 <!-- CONTACT / CTA -->
 <section id="cta">
@@ -993,16 +1026,17 @@ footer::before {
     </div>
   </div>
 </section>
+</div>
 
 <footer>
   <div class="footer-logo"><img src="images/Black Logo_without background.png" alt="Zetavai" class="footer-logo-img"><span>Zetavai</span> &nbsp;&middot;&nbsp; Make it right with AI</div>
-  <div class="footer-copy">&copy; 2026 Zetavai &middot; Pune, India</div>
+  <div class="footer-copy">&copy; 2025 Zetavai &middot; Pune, India</div>
   <ul class="footer-nav">
-    <li><a href="#who">Who We Help</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#impact">Impact</a></li>
-    <li><a href="#team">Team</a></li>
-    <li><a href="#cta">Contact</a></li>
+    <li><a href="#" data-page="who">Who We Help</a></li>
+    <li><a href="#" data-page="services">Services</a></li>
+    <li><a href="#" data-page="impact">Impact</a></li>
+    <li><a href="#" data-page="team">Team</a></li>
+    <li><a href="#" data-page="home">Contact</a></li>
   </ul>
 </footer>
 
@@ -1121,6 +1155,36 @@ footer::before {
       container.appendChild(b);
     }
   })();
+
+  // ========================================
+  // Multi-page navigation
+  // ========================================
+  document.querySelectorAll('[data-page]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      const targetPage = el.getAttribute('data-page');
+
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+      // Show target page
+      document.getElementById('page-' + targetPage).classList.add('active');
+
+      // Update nav active state
+      document.querySelectorAll('[data-page]').forEach(a => a.classList.remove('nav-active'));
+      el.classList.add('nav-active');
+
+      // Close mobile nav if open
+      const mobileNav = document.querySelector('.mobile-nav');
+      if (mobileNav && mobileNav.classList.contains('show')) {
+        mobileNav.classList.remove('show');
+        document.querySelector('.hamburger').classList.remove('active');
+      }
+
+      // Scroll to top of new page
+      document.querySelector('.page.active').scrollTop = 0;
+    });
+  });
 
   // ========================================
   // Google Sheets + Contact form submission
